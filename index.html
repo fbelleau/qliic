@@ -1,0 +1,1923 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atelier QliiC — Musique et lumières de Noël (MicroBlocks)</title>
+    <meta
+      name="description"
+      content="Fiche pédagogique sans JavaScript présentant l'objectif, le guide étape par étape et le rôle des blocs MicroBlocks du projet #6 : Musique et lumières de Noël."
+    />
+    <meta property="og:title" content="Atelier QliiC — Musique et lumières de Noël (MicroBlocks)" />
+    <meta
+      property="og:description"
+      content="Fiche pédagogique sans JavaScript présentant l'objectif, le guide étape par étape et le rôle des blocs MicroBlocks du projet #6 : Musique et lumières de Noël."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fbelleau.github.io/qliic/" />
+    <meta
+      property="og:image"
+      content="https://fbelleau.github.io/qliic/src/assets/images/noel_qlic_microblocks_setup_1795582782195.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://fbelleau.github.io/qliic/src/assets/images/noel_qlic_microblocks_setup_1795582782195.jpg"
+    />
+    <link rel="canonical" href="https://fbelleau.github.io/qliic/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --canvas: #f8fafc;
+        --surface: #ffffff;
+        --surface-alt: #f1f5f9;
+        --ink: #0f172a;
+        --ink-muted: #475569;
+        --ink-subtle: #64748b;
+        --border: #e2e8f0;
+        --border-strong: #cbd5e1;
+
+        /* Accent 10%: Pine Emerald & Cranberry Crimson */
+        --pine: #0f766e;
+        --pine-dark: #115e59;
+        --pine-soft: #f0fdfa;
+        --cranberry: #be123c;
+        --cranberry-soft: #fff1f2;
+
+        /* MicroBlocks authentic block category palette (WCAG AA checked) */
+        --mb-control: #b45309;
+        --mb-control-bg: #d97706;
+        --mb-control-border: #92400e;
+        --mb-pins: #1d4ed8;
+        --mb-pins-border: #1e40af;
+        --mb-vars: #c2410c;
+        --mb-vars-border: #9a3412;
+        --mb-ops: #15803d;
+        --mb-ops-border: #166534;
+        --mb-lib-oled: #0f766e;
+        --mb-lib-oled-border: #115e59;
+        --mb-lib-sound: #7e22ce;
+        --mb-lib-sound-border: #6b21a8;
+        --mb-lib-neo: #0369a1;
+        --mb-lib-neo-border: #075985;
+        --mb-comment: #475569;
+        --mb-comment-bg: #e2e8f0;
+
+        --font-display: 'Fraunces', Georgia, serif;
+        --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+        --radius-lg: 14px;
+        --radius-md: 10px;
+        --radius-sm: 6px;
+        --container: 1160px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background-color: var(--canvas);
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--canvas);
+        color: var(--ink);
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--pine);
+        outline-offset: 3px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: var(--container);
+        margin-inline: auto;
+        padding-inline: 24px;
+      }
+
+      /* ── Top Navigation Bar (Strict 3-zone Contract) ── */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background-color: rgba(248, 250, 252, 0.94);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+        min-height: 68px;
+      }
+
+      .brand-wordmark {
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-decoration: none;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .primary-nav {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .nav-link {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--ink-muted);
+        text-decoration: none;
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding-block: 6px;
+        border-bottom: 2px solid transparent;
+        transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .nav-link:hover {
+        color: var(--ink);
+        border-bottom-color: var(--pine);
+      }
+
+      .header-action {
+        flex-shrink: 0;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 18px;
+        min-height: 42px;
+        background-color: var(--pine);
+        color: #ffffff;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--pine-dark);
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 18px;
+        min-height: 42px;
+        background-color: var(--surface);
+        color: var(--ink);
+        border: 1px solid var(--border-strong);
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: border-color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          background-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-secondary:hover {
+        background-color: var(--surface-alt);
+        border-color: var(--ink-muted);
+      }
+
+      /* ── Hero Section ── */
+      .hero {
+        padding-block: 56px 40px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        gap: 48px;
+        align-items: stretch;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .meta-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-muted);
+        margin-bottom: 16px;
+      }
+
+      .meta-accent {
+        color: var(--cranberry);
+        font-weight: 600;
+      }
+
+      .hero-title {
+        font-family: var(--font-display);
+        font-size: clamp(2.15rem, 3.8vw, 3.25rem);
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+        color: var(--ink);
+        margin: 0 0 20px;
+        text-wrap: balance;
+      }
+
+      .hero-lead {
+        font-size: 1.0625rem;
+        color: var(--ink-muted);
+        max-width: 60ch;
+        margin: 0 0 28px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .hero-media {
+        position: relative;
+        background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hero-media img {
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        object-fit: cover;
+        flex: 1;
+      }
+
+      .hero-caption {
+        padding: 12px 16px;
+        background-color: var(--surface);
+        border-top: 1px solid var(--border);
+        font-size: 0.8125rem;
+        color: var(--ink-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      /* ── 4-Column Summary Strip below Hero ── */
+      .spec-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
+        background-color: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        margin-top: 40px;
+      }
+
+      .spec-cell {
+        background-color: var(--surface);
+        padding: 20px 22px;
+      }
+
+      .spec-value {
+        font-family: var(--font-display);
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 4px;
+      }
+
+      .spec-label {
+        font-size: 0.875rem;
+        color: var(--ink-muted);
+      }
+
+      /* ── Sections ── */
+      .section {
+        padding-block: 64px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section:last-of-type {
+        border-bottom: none;
+      }
+
+      .section-header {
+        margin-bottom: 36px;
+        max-width: 72ch;
+      }
+
+      .section-kicker {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--pine);
+        margin-bottom: 8px;
+      }
+
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.625rem, 2.5vw, 2.25rem);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        margin: 0 0 12px;
+        text-wrap: balance;
+      }
+
+      .section-intro {
+        font-size: 1rem;
+        color: var(--ink-muted);
+        margin: 0;
+      }
+
+      /* ── Section 1: Objectif pédagogique ── */
+      .objective-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .objective-card {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 28px;
+      }
+
+      .objective-index {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--cranberry);
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 10px;
+      }
+
+      .objective-card h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: var(--ink);
+      }
+
+      .objective-card p {
+        margin: 0;
+        color: var(--ink-muted);
+        font-size: 0.9375rem;
+      }
+
+      .objective-outcome {
+        margin-top: 28px;
+        padding: 24px 28px;
+        background-color: var(--pine-soft);
+        border: 1px solid #99f6e4;
+        border-radius: var(--radius-md);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .objective-outcome h3 {
+        font-size: 1.0625rem;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: var(--pine-dark);
+      }
+
+      .objective-outcome p {
+        margin: 0;
+        color: var(--ink);
+        font-size: 0.9375rem;
+      }
+
+      /* ── Section 2: Matériel & Brochage ── */
+      .hardware-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+        gap: 32px;
+        align-items: start;
+      }
+
+      .table-card {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9375rem;
+      }
+
+      .data-table th {
+        padding: 14px 18px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--ink-muted);
+        background-color: var(--surface-alt);
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      .data-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .mono-pin {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+
+      .songs-panel {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 24px;
+      }
+
+      .songs-panel h3 {
+        font-size: 1.0625rem;
+        font-weight: 700;
+        margin: 0 0 6px;
+      }
+
+      .songs-panel > p {
+        font-size: 0.875rem;
+        color: var(--ink-muted);
+        margin: 0 0 20px;
+      }
+
+      .song-row {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 14px;
+        padding-block: 14px;
+        border-top: 1px solid var(--border);
+        align-items: start;
+      }
+
+      .song-pos {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--cranberry);
+        background-color: var(--cranberry-soft);
+        border: 1px solid #fecdd3;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        padding: 6px 4px;
+      }
+
+      .song-title {
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 2px;
+      }
+
+      .song-meta {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        color: var(--ink-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ── MicroBlocks Authentic Pure-CSS Blocks ── */
+      .mb-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+        font-family: var(--font-body);
+        font-size: 0.8125rem;
+        line-height: 1.35;
+      }
+
+      .mb-block {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 7px;
+        color: #ffffff;
+        font-weight: 600;
+        border: 1px solid rgba(0, 0, 0, 0.22);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        max-width: 100%;
+      }
+
+      .mb-hat {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding-top: 10px;
+        padding-inline: 16px;
+      }
+
+      .mb-control {
+        background-color: var(--mb-control-bg);
+        border-color: var(--mb-control-border);
+        color: #ffffff;
+      }
+
+      .mb-pins {
+        background-color: var(--mb-pins);
+        border-color: var(--mb-pins-border);
+      }
+
+      .mb-vars {
+        background-color: var(--mb-vars);
+        border-color: var(--mb-vars-border);
+      }
+
+      .mb-ops {
+        background-color: var(--mb-ops);
+        border-color: var(--mb-ops-border);
+      }
+
+      .mb-oled {
+        background-color: var(--mb-lib-oled);
+        border-color: var(--mb-lib-oled-border);
+      }
+
+      .mb-sound {
+        background-color: var(--mb-lib-sound);
+        border-color: var(--mb-lib-sound-border);
+      }
+
+      .mb-neo {
+        background-color: var(--mb-lib-neo);
+        border-color: var(--mb-lib-neo-border);
+      }
+
+      .mb-comment {
+        background-color: var(--mb-comment-bg);
+        border-color: var(--border-strong);
+        color: var(--ink);
+        font-style: italic;
+        font-weight: 500;
+      }
+
+      .mb-slot {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background-color: #ffffff;
+        color: var(--ink);
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid rgba(15, 23, 42, 0.18);
+      }
+
+      .mb-reporter {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.78125rem;
+        border: 1px solid rgba(0, 0, 0, 0.22);
+      }
+
+      .mb-bool {
+        border-radius: 5px;
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+        padding-inline: 14px;
+      }
+
+      .mb-c-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        border-left: 12px solid var(--mb-control-bg);
+        border-radius: 7px;
+        padding-left: 8px;
+        padding-block: 4px;
+        margin-block: 2px;
+        background-color: rgba(217, 119, 6, 0.06);
+      }
+
+      .mb-c-header {
+        margin-left: -12px;
+      }
+
+      .mb-c-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding-block: 6px;
+        padding-left: 4px;
+      }
+
+      .mb-c-footer {
+        height: 14px;
+        margin-left: -12px;
+        background-color: var(--mb-control-bg);
+        border: 1px solid var(--mb-control-border);
+        border-radius: 0 6px 6px 6px;
+        width: 120px;
+      }
+
+      .mb-swatch {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        background: conic-gradient(#ef4444, #f59e0b, #10b981, #06b6d4, #6366f1, #ec4899, #ef4444);
+        border: 1px solid #ffffff;
+      }
+
+      /* ── Section 3: Guide étape par étape ── */
+      .steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .step-card {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        gap: 32px;
+        align-items: start;
+      }
+
+      .step-number {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: var(--pine);
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 8px;
+      }
+
+      .step-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0 0 12px;
+      }
+
+      .step-desc {
+        color: var(--ink-muted);
+        margin: 0 0 14px;
+        font-size: 0.9375rem;
+      }
+
+      .step-checklist {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--ink);
+        font-size: 0.9375rem;
+      }
+
+      .step-checklist li {
+        margin-bottom: 8px;
+      }
+
+      .step-checklist code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        background-color: var(--surface-alt);
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+      }
+
+      .step-visual {
+        background-color: var(--surface-alt);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 20px;
+      }
+
+      .step-visual-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-muted);
+        margin-bottom: 12px;
+      }
+
+      /* Pure HTML+CSS Native Accordion for RTTTL Strings */
+      details.rtttl-drawer {
+        margin-top: 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background-color: var(--surface-alt);
+      }
+
+      details.rtttl-drawer summary {
+        cursor: pointer;
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--pine-dark);
+        list-style-position: inside;
+      }
+
+      details.rtttl-drawer summary:hover {
+        background-color: #e2e8f0;
+      }
+
+      .rtttl-body {
+        padding: 0 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .rtttl-item-label {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .rtttl-code {
+        margin: 0;
+        padding: 10px 12px;
+        background-color: var(--ink);
+        color: #f8fafc;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        line-height: 1.5;
+        border-radius: var(--radius-sm);
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        user-select: all;
+      }
+
+      /* ── Full Script Blueprint (Side-by-side) ── */
+      .scripts-overview {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+        gap: 24px;
+        align-items: start;
+      }
+
+      .script-sheet {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+      }
+
+      .script-sheet-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .script-sheet-head h3 {
+        margin: 0;
+        font-size: 1.0625rem;
+        font-weight: 700;
+      }
+
+      .script-sheet-head span {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        color: var(--ink-muted);
+      }
+
+      /* ── Section 4: Rôle des blocs MicroBlocks ── */
+      .block-groups {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+      }
+
+      .block-group-title {
+        font-family: var(--font-display);
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0 0 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .blocks-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .block-doc-card {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .block-doc-meta {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-subtle);
+      }
+
+      .block-doc-card p {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: var(--ink-muted);
+      }
+
+      .block-doc-params {
+        margin: 0;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        font-size: 0.8125rem;
+        color: var(--ink);
+      }
+
+      .block-doc-params code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        background-color: var(--surface-alt);
+        padding: 1px 5px;
+        border-radius: 4px;
+      }
+
+      /* ── Footer ── */
+      .site-footer {
+        background-color: var(--surface);
+        border-top: 1px solid var(--border);
+        padding-block: 32px;
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        font-size: 0.875rem;
+        color: var(--ink-muted);
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .footer-links a {
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer-links a:hover {
+        color: var(--ink);
+        text-decoration: underline;
+      }
+
+      /* ── Responsive Breakpoints ── */
+      @media (max-width: 1024px) {
+        .hero-grid,
+        .hardware-layout,
+        .step-card,
+        .scripts-overview {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .spec-strip {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .primary-nav {
+          display: none;
+        }
+
+        .objective-grid,
+        .blocks-grid,
+        .objective-outcome {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .spec-strip {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .hero {
+          padding-block: 36px 28px;
+        }
+
+        .section {
+          padding-block: 44px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition: none !important;
+        }
+      }
+
+      @media print {
+        .site-header,
+        .hero-actions {
+          display: none;
+        }
+        body {
+          background: #ffffff;
+        }
+        .section,
+        .step-card,
+        .block-doc-card {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar: Strictly 3 zones (Wordmark — Nav links — 1 Primary Action) -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#top" class="brand-wordmark">Atelier QliiC</a>
+
+        <nav class="primary-nav" aria-label="Navigation principale">
+          <a href="#objectif" class="nav-link">Objectif</a>
+          <a href="#materiel" class="nav-link">Matériel</a>
+          <a href="#etapes" class="nav-link">Étapes</a>
+          <a href="#blocs" class="nav-link">Blocs</a>
+        </nav>
+
+        <div class="header-action">
+          <a
+            href="https://microblocks.fun/run/microblocks.html#scripts=GP%20Scripts%0Adepends%20%27NeoPixel%27%20%27OLED%20Graphics%27%20%27Ringtone%27%20%27Tone%27%0A%0Ascript%20321%2065%20%7B%0AwhenStarted%0Acomment%20%27Projet%20%236%20%3A%20Musique%20et%20lumieres%20de%20Noel%27%0A%27attach%20buzzer%20to%20pin%27%204%0AOLEDInit_I2C%20%27OLED_0.96in%27%20%273C%27%200%20false%0AOLEDwrite%20%27QliiC%27%200%200%20false%202%0AwaitMillis%202000%0AOLEDclear%0Aforever%20%7B%0A%20%20comment%20%27Lire%20le%20bouton%20de%20la%20broche%2013%20et%20le%20potentiometre%20sur%20la%20broche%2034%27%0A%20%20bouton%20%3D%20%28not%20%28digitalReadOp%2013%20%27up%27%29%29%0A%20%20potentiometre%20%3D%20%28%27%5Bmisc%3Arescale%5D%27%20%28analogReadOp%2034%29%200%201023%201%203%29%0A%20%20OLEDwrite%20%28%27%5Bdata%3Ajoin%5D%27%20%27B%3A%27%20bouton%20%27%20%20%20P%3A%27%20potentiometre%29%200%200%20false%202%0A%20%20if%20bouton%20%7B%0A%20%20%20%20comment%20%27Jouer%20l%27%27air%20de%20Noel%20choisi%20avec%20le%20potentiometre%27%0A%20%20%20%20if%20%28potentiometre%20%3D%3D%201%29%20%7B%0A%20%20%20%20%20%20%27play%20ringtone%27%20%27ViveLeVent%3Ad%3D4%2Co%3D5%2Cb%3D140%3Ae%2Ce%2C2e%2Ce%2Ce%2C2e%2Ce%2Cg%2Cc.%2C8d%2C1e%2Cf%2Cf%2Cf.%2C8f%2Cf%2Ce%2Ce%2C8e%2C8e%2Ce%2Cd%2Cd%2Ce%2C2d%2C2g%2Ce%2Ce%2C2e%2Ce%2Ce%2C2e%2Ce%2Cg%2Cc.%2C8d%2C1e%2Cf%2Cf%2Cf.%2C8f%2Cf%2Ce%2Ce%2C8e%2C8e%2Cg%2Cg%2Cf%2Cd%2C1c%27%0A%20%20%20%20%7D%20%28potentiometre%20%3D%3D%202%29%20%7B%0A%20%20%20%20%20%20%27play%20ringtone%27%20%27PetitPapaNoel%3Ad%3D4%2Co%3D5%2Cb%3D104%3A8g4%2C8c%2Ce%2C8g%2C8e%2Cc.%2C8a%2C8g%2C8e%2Cd%2C8g4%2C8d%2Cf%2C8a%2C8f%2Cd.%2C8b%2C8a%2C8f%2Ce%2C8g4%2C8e%2Cg%2C8c6%2C8a%2Cg.%2C8e%2C8c%2C8d%2C8e%2C8f%2C8e%2C8d%2C8c%2C2d%2Cp%2C8g4%2C8c%2Ce%2C8g%2C8e%2Cc.%2C8a%2C8g%2C8e%2Cd%2C8g4%2C8d%2Cf%2C8a%2C8f%2Cd.%2C8b%2C8a%2C8f%2Ce%2C8c%2C8e%2C8g%2C8a%2C8g%2C8e%2C8d%2C8b4%2C8d%2C8f%2C8a%2C8g%2C8f%2C8d%2C2c%27%0A%20%20%20%20%7D%20%28potentiometre%20%3D%3D%203%29%20%7B%0A%20%20%20%20%20%20comment%20%27PROMPT%3A%20cr%C3%A9er%20une%20chaines%20de%20caractere%20ringtone%20a%20utiliser%20dans%20microblocks%20pour%20%22Minuit%20Chretien%22%27%0A%20%20%20%20%20%20%27play%20ringtone%27%20%27MinuitChretien%3Ad%3D4%2Co%3D5%2Cb%3D96%3A8c%2C8c%2C8c%2C8a4%2C8a4%2C8c%2C8c%2C8g4%2C8g4%2C8c%2C8e%2Cg.%2C8f%2C8e%2C8d%2C8c%2C8d%2C8e%2C8f%2C8f%2Ce%2C8c%2C8e%2Cg.%2C8a%2C8g%2C8e%2C8c%2C8d%2C8e%2Cf%2C8d%2Cc%2Cp%2C8e%2C8e%2C8e%2Ce.%2C8g%2C8g%2C8g%2Cg.%2C8a%2C8a%2C8g%2C8e%2Cc.%2Cp%2C8e%2C8e%2C8e%2Ce.%2C8g%2C8g%2C8g%2Cg.%2C8a%2C8a%2C8g%2C8e%2Cc.%27%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A%7D%0A%0Ascript%20919%20101%20%7B%0AwhenStarted%0Acomment%20%27Faire%20clignoter%20les%207%20LEDS%20RGB%27%0AneoPixelAttach%207%2014%0Aforever%20%7B%0A%20%20waitMillis%20500%0A%20%20setNeoPixelColor%201%20%28neoPixel_colorSwatch%20%28randomColor%29%29%0A%20%20rotateNeoPixelsBy%201%0A%7D%0A%7D"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary"
+          >
+            Ouvrir dans MicroBlocks
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <div class="meta-line">
+                <span class="meta-accent">Projet #6</span>
+                <span aria-hidden="true">·</span>
+                <span>MicroBlocks &amp; carte QliiC</span>
+                <span aria-hidden="true">·</span>
+                <span>Fiche d'activité de Noël</span>
+              </div>
+
+              <h1 class="hero-title">Musique et lumières de Noël avec MicroBlocks</h1>
+
+              <p class="hero-lead">
+                Programme un véritable jukebox festif sur la carte QliiC : choisis l'un des trois airs de Noël grâce au
+                potentiomètre, déclenche la mélodie avec le bouton-poussoir, affiche les valeurs en direct sur l'écran
+                OLED et fais tourner en parallèle une guirlande multicolore de 7 DEL RGB.
+              </p>
+
+              <div class="hero-actions">
+                <a href="#etapes" class="btn-primary">Suivre le guide étape par étape</a>
+                <a href="#blocs" class="btn-secondary">Comprendre chaque bloc</a>
+              </div>
+            </div>
+
+            <figure class="hero-media">
+              <img
+                src="./src/assets/images/noel_qlic_microblocks_setup_1795582782195.jpg"
+                alt="Montage électronique QliiC pour l'activité de Noël : carte microcontrôleur ESP32 reliée à un écran OLED affichant QliiC, un anneau de 7 DEL NeoPixel RGB, un buzzer, un bouton-poussoir et un potentiomètre."
+                referrerpolicy="no-referrer"
+              />
+              <figcaption class="hero-caption">
+                <span>Montage QliiC complet : OLED I2C, 7 DEL NeoPixel, buzzer, bouton et potentiomètre</span>
+                <span class="mono-pin">ESP32</span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="spec-strip" aria-label="Caractéristiques du projet">
+            <div class="spec-cell">
+              <div class="spec-value">4 bibliothèques</div>
+              <div class="spec-label">NeoPixel, OLED Graphics, Ringtone, Tone</div>
+            </div>
+            <div class="spec-cell">
+              <div class="spec-value">2 scripts parallèles</div>
+              <div class="spec-label">Mélodie + affichage &amp; animation lumineuse</div>
+            </div>
+            <div class="spec-cell">
+              <div class="spec-value">3 airs de Noël</div>
+              <div class="spec-label">Vive le vent, Petit Papa Noël, Minuit chrétiens</div>
+            </div>
+            <div class="spec-cell">
+              <div class="spec-value">5 composants</div>
+              <div class="spec-label">Buzzer, OLED 0.96", bouton, potentiomètre, 7 DEL</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Objectif de l'activité de Noël -->
+      <section id="objectif" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-kicker">01. Intention pédagogique</div>
+            <h2 class="section-title">Objectif de l'activité de Noël</h2>
+            <p class="section-intro">
+              Concevoir un objet interactif de fin d'année complet en reliant capteurs, afficheur, son et lumière au sein
+              d'un même programme MicroBlocks structuré en deux tâches simultanées.
+            </p>
+          </div>
+
+          <div class="objective-grid">
+            <article class="objective-card">
+              <div class="objective-index">Compétence 01</div>
+              <h3>Lire des entrées numériques et analogiques</h3>
+              <p>
+                Distinguer un signal tout-ou-rien (le bouton-poussoir sur la broche <code>13</code> en mode
+                <em>pull-up</em>) d'un signal continu (le potentiomètre sur la broche <code>34</code> mesuré entre
+                <code>0</code> et <code>1023</code> puis ramené à l'échelle <code>1</code> à <code>3</code>).
+              </p>
+            </article>
+
+            <article class="objective-card">
+              <div class="objective-index">Compétence 02</div>
+              <h3>Piloter plusieurs périphériques matériels</h3>
+              <p>
+                Initialiser un écran OLED I2C (adresse <code>3C</code>), afficher un texte formaté en temps réel,
+                produire une partition musicale codée en RTTTL sur un buzzer et animer un anneau de 7 DEL RGB
+                adressables.
+              </p>
+            </article>
+
+            <article class="objective-card">
+              <div class="objective-index">Compétence 03</div>
+              <h3>Décider avec des structures conditionnelles</h3>
+              <p>
+                Imbriquer une condition déclenchée par le bouton (<code>if bouton</code>) et une sélection multiple
+                selon la position du potentiomètre (<code>1</code>, <code>2</code> ou <code>3</code>) pour associer
+                chaque réglage à sa mélodie.
+              </p>
+            </article>
+
+            <article class="objective-card">
+              <div class="objective-index">Compétence 04</div>
+              <h3>Exploiter le parallélisme natif de MicroBlocks</h3>
+              <p>
+                Séparer le programme en deux scripts démarrés simultanément (<code>whenStarted</code>) : la guirlande
+                lumineuse change de couleur toutes les 500 ms sans bloquer la lecture du bouton ni interrompre la
+                musique.
+              </p>
+            </article>
+          </div>
+
+          <div class="objective-outcome">
+            <div>
+              <h3>Résultat attendu en fin d'atelier</h3>
+              <p>
+                Au démarrage, l'écran affiche <strong>QliiC</strong> pendant 2 secondes, puis indique en direct l'état du
+                bouton (<code>B:true/false</code>) et la chanson sélectionnée (<code>P:1</code>, <code>P:2</code> ou
+                <code>P:3</code>). L'anneau de 7 DEL effectue une rotation continue de couleurs festives aléatoires, et
+                chaque pression sur le bouton lance l'air de Noël choisi.
+              </p>
+            </div>
+            <a href="#etapes" class="btn-primary">Passer aux étapes</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Matériel, brochage et mélodies -->
+      <section id="materiel" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-kicker">02. Configuration matérielle</div>
+            <h2 class="section-title">Brochage QliiC et répertoire musical</h2>
+            <p class="section-intro">
+              Avant d'assembler les blocs, vérifie que chaque module correspond exactement au numéro de broche utilisé
+              dans les scripts MicroBlocks.
+            </p>
+          </div>
+
+          <div class="hardware-layout">
+            <div class="table-card">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Composant</th>
+                    <th>Broche / Bus</th>
+                    <th>Mode / Paramètre</th>
+                    <th>Rôle dans le montage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Buzzer</strong></td>
+                    <td class="mono-pin">Broche 4</td>
+                    <td>Sortie sonore (Tone)</td>
+                    <td>Joue les notes des chansons de Noël.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Écran OLED 0,96"</strong></td>
+                    <td class="mono-pin">I2C · 0x3C</td>
+                    <td>Rotation 0 · Flip false</td>
+                    <td>Affiche « QliiC » puis <code>B:... P:...</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Bouton-poussoir</strong></td>
+                    <td class="mono-pin">Broche 13</td>
+                    <td>Entrée numérique <code>'up'</code></td>
+                    <td>Déclenche la lecture de la mélodie choisie.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Potentiomètre</strong></td>
+                    <td class="mono-pin">Broche 34</td>
+                    <td>Entrée analogique (0–1023)</td>
+                    <td>Sélectionne la piste <code>1</code>, <code>2</code> ou <code>3</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>7 DEL RGB NeoPixel</strong></td>
+                    <td class="mono-pin">Broche 14</td>
+                    <td>7 DEL adressables</td>
+                    <td>Diffuse une guirlande colorée en rotation.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <aside class="songs-panel" aria-label="Sélecteur des trois airs de Noël">
+              <h3>Sélection par potentiomètre</h3>
+              <p>La fonction <code>rescale</code> découpe la rotation du potentiomètre en trois plages égales.</p>
+
+              <div class="song-row">
+                <div class="song-pos">P : 1</div>
+                <div>
+                  <div class="song-title">Vive le vent</div>
+                  <div class="song-meta">Tempo 140 BPM · Durée par défaut 1/4 · Octave 5</div>
+                </div>
+              </div>
+
+              <div class="song-row">
+                <div class="song-pos">P : 2</div>
+                <div>
+                  <div class="song-title">Petit Papa Noël</div>
+                  <div class="song-meta">Tempo 104 BPM · Durée par défaut 1/4 · Octave 5</div>
+                </div>
+              </div>
+
+              <div class="song-row">
+                <div class="song-pos">P : 3</div>
+                <div>
+                  <div class="song-title">Minuit, chrétiens</div>
+                  <div class="song-meta">Tempo 96 BPM · Durée par défaut 1/4 · Octave 5</div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Guide par étape pour créer le script -->
+      <section id="etapes" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-kicker">03. Tutoriel de construction</div>
+            <h2 class="section-title">Guide étape par étape pour créer le script</h2>
+            <p class="section-intro">
+              Suis ces 7 étapes dans l'ordre dans l'éditeur MicroBlocks. Chaque étape indique les blocs à glisser et leur
+              assemblage exact.
+            </p>
+          </div>
+
+          <div class="steps-list">
+            <!-- Étape 1 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 01</div>
+                <h3 class="step-title">Charger les 4 bibliothèques indispensables</h3>
+                <p class="step-desc">
+                  Ouvre MicroBlocks, branche la carte QliiC en USB (icône prise verte en haut), puis clique sur
+                  <strong>+ Ajouter une bibliothèque</strong> dans la colonne de gauche pour activer :
+                </p>
+                <ol class="step-checklist">
+                  <li><code>NeoPixel</code> (pour contrôler les 7 DEL RGB).</li>
+                  <li><code>OLED Graphics</code> (pour initialiser et écrire sur l'écran 0,96").</li>
+                  <li><code>Ringtone</code> (pour lire les partitions RTTTL).</li>
+                  <li><code>Tone</code> (moteur audio utilisé par le bloc Ringtone sur le buzzer).</li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Dépendances du projet (en-tête GP)</div>
+                <div class="mb-stack">
+                  <div class="mb-block mb-neo">Bibliothèque · NeoPixel</div>
+                  <div class="mb-block mb-oled">Bibliothèque · OLED Graphics</div>
+                  <div class="mb-block mb-sound">Bibliothèque · Ringtone</div>
+                  <div class="mb-block mb-sound">Bibliothèque · Tone</div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 2 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 02</div>
+                <h3 class="step-title">Créer les deux variables du programme</h3>
+                <p class="step-desc">
+                  Dans la catégorie <strong>Variables</strong>, clique deux fois sur <strong>Créer une variable</strong>
+                  pour mémoriser l'état des deux capteurs :
+                </p>
+                <ol class="step-checklist">
+                  <li><code>bouton</code> : contiendra <code>true</code> si le bouton est pressé, sinon <code>false</code>.</li>
+                  <li><code>potentiometre</code> : contiendra le numéro de chanson <code>1</code>, <code>2</code> ou <code>3</code>.</li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Variables créées</div>
+                <div class="mb-stack">
+                  <div class="mb-block mb-vars">
+                    <span class="mb-reporter mb-vars">bouton</span>
+                    <span>→ état booléen (vrai / faux)</span>
+                  </div>
+                  <div class="mb-block mb-vars">
+                    <span class="mb-reporter mb-vars">potentiometre</span>
+                    <span>→ entier entre 1 et 3</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 3 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 03</div>
+                <h3 class="step-title">Initialiser le buzzer et l'écran OLED (Script 1)</h3>
+                <p class="step-desc">
+                  Place un bloc chapeau <code>when started</code> dans l'espace de travail pour démarrer le premier
+                  script, puis empile la séquence d'accueil :
+                </p>
+                <ol class="step-checklist">
+                  <li>Ajoute un commentaire : <code>Projet #6 : Musique et lumieres de Noel</code>.</li>
+                  <li>Attache le buzzer à la broche <code>4</code> (<code>attach buzzer to pin 4</code>).</li>
+                  <li>Initialise l'écran avec <code>OLED_0.96in</code>, adresse <code>3C</code>, rotation <code>0</code>, flip <code>false</code>.</li>
+                  <li>Écris <code>QliiC</code> aux coordonnées <code>0, 0</code> en taille <code>2</code>, attends <code>2000</code> ms, puis efface l'écran.</li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Bloc d'initialisation du Script 1</div>
+                <div class="mb-stack">
+                  <div class="mb-block mb-control mb-hat">when started</div>
+                  <div class="mb-block mb-comment">comment · Projet #6 : Musique et lumieres de Noel</div>
+                  <div class="mb-block mb-sound">attach buzzer to pin <span class="mb-slot">4</span></div>
+                  <div class="mb-block mb-oled">
+                    OLED init I2C <span class="mb-slot">OLED_0.96in</span> addr <span class="mb-slot">3C</span> rot
+                    <span class="mb-slot">0</span> flip <span class="mb-slot">false</span>
+                  </div>
+                  <div class="mb-block mb-oled">
+                    OLED write <span class="mb-slot">QliiC</span> x <span class="mb-slot">0</span> y
+                    <span class="mb-slot">0</span> inv <span class="mb-slot">false</span> scale <span class="mb-slot">2</span>
+                  </div>
+                  <div class="mb-block mb-control">wait <span class="mb-slot">2000</span> millisecs</div>
+                  <div class="mb-block mb-oled">OLED clear</div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 4 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 04</div>
+                <h3 class="step-title">Lire les capteurs et afficher l'état en boucle</h3>
+                <p class="step-desc">
+                  Juste sous <code>OLED clear</code>, place une boucle <code>forever</code> qui lit continuellement le
+                  bouton et le potentiomètre et met à jour l'affichage OLED :
+                </p>
+                <ol class="step-checklist">
+                  <li>
+                    <code>set bouton to</code> avec <code>not (read digital pin 13 pull 'up')</code> : l'inversion
+                    <code>not</code> transforme l'appui (0V) en <code>true</code>.
+                  </li>
+                  <li>
+                    <code>set potentiometre to</code> avec <code>rescale (read analog pin 34) from (0, 1023) to (1, 3)</code>.
+                  </li>
+                  <li>
+                    Assemble le texte avec <code>join 'B:' bouton '   P:' potentiometre</code> et affiche-le à
+                    <code>0, 0</code> en taille <code>2</code>.
+                  </li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Lecture et affichage dans forever</div>
+                <div class="mb-stack">
+                  <div class="mb-c-wrapper">
+                    <div class="mb-block mb-control mb-c-header">forever</div>
+                    <div class="mb-c-body">
+                      <div class="mb-block mb-comment">comment · Lire le bouton (13) et le potentiometre (34)</div>
+                      <div class="mb-block mb-vars">
+                        set <span class="mb-slot">bouton</span> to
+                        <span class="mb-reporter mb-ops mb-bool">
+                          not <span class="mb-reporter mb-pins mb-bool">digital pin <span class="mb-slot">13</span> pull <span class="mb-slot">up</span></span>
+                        </span>
+                      </div>
+                      <div class="mb-block mb-vars">
+                        set <span class="mb-slot">potentiometre</span> to
+                        <span class="mb-reporter mb-ops">
+                          rescale <span class="mb-reporter mb-pins">analog pin <span class="mb-slot">34</span></span>
+                          <span class="mb-slot">0</span> <span class="mb-slot">1023</span> →
+                          <span class="mb-slot">1</span> <span class="mb-slot">3</span>
+                        </span>
+                      </div>
+                      <div class="mb-block mb-oled">
+                        OLED write
+                        <span class="mb-reporter mb-ops">
+                          join <span class="mb-slot">B:</span> <span class="mb-reporter mb-vars">bouton</span>
+                          <span class="mb-slot">&nbsp;&nbsp;&nbsp;P:</span> <span class="mb-reporter mb-vars">potentiometre</span>
+                        </span>
+                        at <span class="mb-slot">0</span> <span class="mb-slot">0</span> scale <span class="mb-slot">2</span>
+                      </div>
+                    </div>
+                    <div class="mb-c-footer"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 5 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 05</div>
+                <h3 class="step-title">Jouer l'air de Noël sélectionné si le bouton est pressé</h3>
+                <p class="step-desc">
+                  Toujours dans la boucle <code>forever</code>, ajoute un bloc <code>if bouton</code> contenant un bloc
+                  conditionnel à 3 branches (clique sur la petite flèche ▸ du bloc <code>if</code> pour ajouter les
+                  branches <code>else if</code>) :
+                </p>
+                <ol class="step-checklist">
+                  <li>Si <code>potentiometre = 1</code> → jouer <strong>Vive le vent</strong>.</li>
+                  <li>Sinon si <code>potentiometre = 2</code> → jouer <strong>Petit Papa Noël</strong>.</li>
+                  <li>Sinon si <code>potentiometre = 3</code> → jouer <strong>Minuit, chrétiens</strong>.</li>
+                </ol>
+
+                <details class="rtttl-drawer">
+                  <summary>Afficher les 3 chaînes RTTTL exactes à copier dans « play ringtone »</summary>
+                  <div class="rtttl-body">
+                    <div>
+                      <div class="rtttl-item-label">1 · Vive le vent</div>
+                      <pre class="rtttl-code">ViveLeVent:d=4,o=5,b=140:e,e,2e,e,e,2e,e,g,c.,8d,1e,f,f,f.,8f,f,e,e,8e,8e,e,d,d,e,2d,2g,e,e,2e,e,e,2e,e,g,c.,8d,1e,f,f,f.,8f,f,e,e,8e,8e,g,g,f,d,1c</pre>
+                    </div>
+                    <div>
+                      <div class="rtttl-item-label">2 · Petit Papa Noël</div>
+                      <pre class="rtttl-code">PetitPapaNoel:d=4,o=5,b=104:8g4,8c,e,8g,8e,c.,8a,8g,8e,d,8g4,8d,f,8a,8f,d.,8b,8a,8f,e,8g4,8e,g,8c6,8a,g.,8e,8c,8d,8e,8f,8e,8d,8c,2d,p,8g4,8c,e,8g,8e,c.,8a,8g,8e,d,8g4,8d,f,8a,8f,d.,8b,8a,8f,e,8c,8e,8g,8a,8g,8e,8d,8b4,8d,8f,8a,8g,8f,8d,2c</pre>
+                    </div>
+                    <div>
+                      <div class="rtttl-item-label">3 · Minuit, chrétiens</div>
+                      <pre class="rtttl-code">MinuitChretien:d=4,o=5,b=96:8c,8c,8c,8a4,8a4,8c,8c,8g4,8g4,8c,8e,g.,8f,8e,8d,8c,8d,8e,8f,8f,e,8c,8e,g.,8a,8g,8e,8c,8d,8e,f,8d,c,p,8e,8e,8e,e.,8g,8g,8g,g.,8a,8a,8g,8e,c.,p,8e,8e,8e,e.,8g,8g,8g,g.,8a,8a,8g,8e,c.</pre>
+                    </div>
+                  </div>
+                </details>
+              </div>
+
+              <div class="step-visual">
+                <div class="step-visual-label">Sélection musicale conditionnelle</div>
+                <div class="mb-stack">
+                  <div class="mb-c-wrapper">
+                    <div class="mb-block mb-control mb-c-header">
+                      if <span class="mb-reporter mb-vars mb-bool">bouton</span>
+                    </div>
+                    <div class="mb-c-body">
+                      <div class="mb-block mb-comment">comment · Jouer l'air choisi avec le potentiometre</div>
+                      <div class="mb-c-wrapper">
+                        <div class="mb-block mb-control mb-c-header">
+                          if <span class="mb-reporter mb-ops mb-bool"><span class="mb-reporter mb-vars">potentiometre</span> = <span class="mb-slot">1</span></span>
+                        </div>
+                        <div class="mb-c-body">
+                          <div class="mb-block mb-sound">play ringtone <span class="mb-slot">ViveLeVent:...</span></div>
+                        </div>
+                        <div class="mb-block mb-control mb-c-header">
+                          else if <span class="mb-reporter mb-ops mb-bool"><span class="mb-reporter mb-vars">potentiometre</span> = <span class="mb-slot">2</span></span>
+                        </div>
+                        <div class="mb-c-body">
+                          <div class="mb-block mb-sound">play ringtone <span class="mb-slot">PetitPapaNoel:...</span></div>
+                        </div>
+                        <div class="mb-block mb-control mb-c-header">
+                          else if <span class="mb-reporter mb-ops mb-bool"><span class="mb-reporter mb-vars">potentiometre</span> = <span class="mb-slot">3</span></span>
+                        </div>
+                        <div class="mb-c-body">
+                          <div class="mb-block mb-sound">play ringtone <span class="mb-slot">MinuitChretien:...</span></div>
+                        </div>
+                        <div class="mb-c-footer"></div>
+                      </div>
+                    </div>
+                    <div class="mb-c-footer"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 6 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 06</div>
+                <h3 class="step-title">Créer la guirlande lumineuse en parallèle (Script 2)</h3>
+                <p class="step-desc">
+                  À côté du premier script, glisse un <strong>deuxième</strong> bloc chapeau <code>when started</code>.
+                  MicroBlocks les exécutera tous les deux en même temps :
+                </p>
+                <ol class="step-checklist">
+                  <li>Attache les <code>7</code> DEL NeoPixel sur la broche <code>14</code> (<code>attach 7 LED NeoPixel strip to pin 14</code>).</li>
+                  <li>Dans une boucle <code>forever</code>, attends <code>500</code> ms.</li>
+                  <li>Allume la DEL <code>1</code> avec une couleur aléatoire (<code>color swatch (random color)</code>).</li>
+                  <li>Décale toutes les DEL d'un cran (<code>rotate NeoPixels by 1</code>) pour faire tourner les couleurs.</li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Script 2 complet (exécuté en parallèle)</div>
+                <div class="mb-stack">
+                  <div class="mb-block mb-control mb-hat">when started</div>
+                  <div class="mb-block mb-comment">comment · Faire clignoter les 7 LEDS RGB</div>
+                  <div class="mb-block mb-neo">
+                    attach <span class="mb-slot">7</span> LED NeoPixel strip to pin <span class="mb-slot">14</span>
+                  </div>
+                  <div class="mb-c-wrapper">
+                    <div class="mb-block mb-control mb-c-header">forever</div>
+                    <div class="mb-c-body">
+                      <div class="mb-block mb-control">wait <span class="mb-slot">500</span> millisecs</div>
+                      <div class="mb-block mb-neo">
+                        set NeoPixel <span class="mb-slot">1</span> color
+                        <span class="mb-reporter mb-neo">
+                          <span class="mb-swatch" aria-hidden="true"></span>
+                          <span class="mb-reporter mb-neo">random color</span>
+                        </span>
+                      </div>
+                      <div class="mb-block mb-neo">rotate NeoPixels by <span class="mb-slot">1</span></div>
+                    </div>
+                    <div class="mb-c-footer"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Étape 7 -->
+            <article class="step-card">
+              <div>
+                <div class="step-number">Étape 07</div>
+                <h3 class="step-title">Tester sur la carte QliiC et vérifier le comportement</h3>
+                <p class="step-desc">
+                  Clique sur le bouton vert <strong>Démarrer (▶)</strong> en haut à droite de MicroBlocks. Observe
+                  immédiatement les quatre vérifications suivantes :
+                </p>
+                <ol class="step-checklist">
+                  <li>L'anneau de 7 DEL RGB s'anime d'une nouvelle couleur toutes les 0,5 secondes sans interruption.</li>
+                  <li>L'écran OLED affiche <code>QliiC</code> pendant 2 secondes, puis passe à <code>B:false&nbsp;&nbsp;&nbsp;P:1</code>.</li>
+                  <li>En tournant le potentiomètre, la valeur <code>P:</code> passe de <code>1</code> à <code>2</code> puis <code>3</code>.</li>
+                  <li>Un appui sur le bouton passe <code>B:</code> à <code>true</code> et joue la mélodie sélectionnée sur le buzzer.</li>
+                </ol>
+              </div>
+              <div class="step-visual">
+                <div class="step-visual-label">Aperçu attendu sur l'écran OLED 0,96"</div>
+                <div
+                  style="
+                    background-color: #020617;
+                    color: #e0f2fe;
+                    border: 2px solid #334155;
+                    border-radius: 8px;
+                    padding: 18px 20px;
+                    font-family: var(--font-mono);
+                  "
+                >
+                  <div style="font-size: 0.75rem; color: #7dd3fc; margin-bottom: 8px">Écran au démarrage (0–2 s)</div>
+                  <div style="font-size: 1.5rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 16px">
+                    QliiC
+                  </div>
+                  <div style="font-size: 0.75rem; color: #7dd3fc; margin-bottom: 8px; border-top: 1px solid #1e293b; padding-top: 12px">
+                    Écran en boucle active
+                  </div>
+                  <div style="font-size: 1.35rem; font-weight: 700; letter-spacing: 0.02em">
+                    B:true&nbsp;&nbsp;&nbsp;P:2
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Rôle détaillé de chaque bloc MicroBlocks -->
+      <section id="blocs" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-kicker">04. Référence technique</div>
+            <h2 class="section-title">Rôle des blocs MicroBlocks utilisés</h2>
+            <p class="section-intro">
+              Chaque bloc du projet possède un rôle précis. Les blocs sont regroupés ci-dessous selon leur catégorie
+              d'origine et leur code couleur dans MicroBlocks.
+            </p>
+          </div>
+
+          <div class="block-groups">
+            <!-- Groupe A: Contrôle & Parallélisme -->
+            <div>
+              <h3 class="block-group-title">Contrôle, boucles et commentaires</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Contrôle (chapeau)</div>
+                  <div class="mb-stack"><div class="mb-block mb-control mb-hat">when started</div></div>
+                  <p>
+                    Déclenche automatiquement l'exécution du script dès la mise sous tension de la carte QliiC ou lors du
+                    clic sur ▶ dans MicroBlocks. Le projet en utilise <strong>deux</strong> en parallèle : un pour le
+                    jukebox + OLED, un pour la guirlande lumineuse.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Contrôle (boucle)</div>
+                  <div class="mb-stack"><div class="mb-block mb-control">forever { ... }</div></div>
+                  <p>
+                    Répète indéfiniment les instructions placées à l'intérieur. C'est ce bloc qui permet de scruter le
+                    bouton et le potentiomètre en continu dans le Script 1 et d'animer les DEL sans fin dans le Script 2.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Contrôle (temporisation)</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-control">wait <span class="mb-slot">2000</span> millisecs</div>
+                  </div>
+                  <p>
+                    Met en pause uniquement le script courant pendant un nombre donné de millisecondes, sans bloquer
+                    l'autre script. Utilisé <code>2000 ms</code> (2 s) pour afficher le logo « QliiC » et
+                    <code>500 ms</code> (0,5 s) pour cadencer le clignotement des NeoPixels.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Contrôle (condition)</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-control">if / else if</div>
+                  </div>
+                  <p>
+                    Exécute un bloc d'instructions uniquement si sa condition booléenne est vraie (<code>true</code>).
+                    Le premier <code>if bouton</code> vérifie l'appui ; le bloc <code>if / else if</code> imbriqué teste
+                    si <code>potentiometre</code> vaut <code>1</code>, <code>2</code> ou <code>3</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Contrôle (annotation)</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-comment">comment 'Projet #6 : ...'</div>
+                  </div>
+                  <p>
+                    Bloc purement documentaire ignoré lors de l'exécution sur la carte. Il sert à expliquer l'intention
+                    d'une section du programme aux élèves ou collègues qui relisent le script.
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Groupe B: Broches & Capteurs -->
+            <div>
+              <h3 class="block-group-title">Entrées matérielles : broches numérique et analogique</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Broches (Pins)</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-pins mb-bool">
+                      read digital pin <span class="mb-slot">13</span> pull <span class="mb-slot">up</span>
+                    </div>
+                  </div>
+                  <p>
+                    Lit l'état électrique (vrai/faux) de la broche <code>13</code> en activant la résistance interne de
+                    tirage vers le haut (<code>'up'</code>). Au repos, la broche est à <code>true</code> ; quand on
+                    appuie sur le bouton relié à la masse (GND), elle passe à <code>false</code>.
+                  </p>
+                  <p class="block-doc-params">
+                    <strong>Paramètres :</strong> broche <code>13</code>, mode de tirage <code>'up'</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Broches (Pins)</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-pins">read analog pin <span class="mb-slot">34</span></div>
+                  </div>
+                  <p>
+                    Mesure la tension variable délivrée par le potentiomètre sur l'entrée analogique <code>34</code> et
+                    retourne un entier compris entre <code>0</code> (butée gauche) et <code>1023</code> (butée droite).
+                  </p>
+                  <p class="block-doc-params">
+                    <strong>Paramètre :</strong> broche analogique <code>34</code> (ADC de l'ESP32 QliiC).
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Groupe C: Variables & Opérateurs -->
+            <div>
+              <h3 class="block-group-title">Variables, logique et transformation de données</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Variables</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-vars">set <span class="mb-slot">bouton</span> to ...</div>
+                  </div>
+                  <p>
+                    Enregistre une valeur en mémoire sous un nom lisible (<code>bouton</code> ou
+                    <code>potentiometre</code>). Cela évite de relire le capteur plusieurs fois par cycle et garantit une
+                    valeur cohérente entre l'affichage OLED et les tests <code>if</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Opérateurs logiques</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-ops mb-bool">not <span class="mb-slot">...</span></div>
+                    <div class="mb-reporter mb-ops mb-bool">
+                      <span class="mb-slot">potentiometre</span> = <span class="mb-slot">1</span>
+                    </div>
+                  </div>
+                  <p>
+                    <code>not</code> inverse la lecture du bouton pull-up afin d'obtenir <code>true</code> lorsque le
+                    bouton est pressé. L'opérateur <code>=</code> (<code>==</code>) compare la variable
+                    <code>potentiometre</code> à <code>1</code>, <code>2</code> ou <code>3</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Opérateurs (Misc)</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-ops">
+                      rescale <span class="mb-slot">val</span> from (<span class="mb-slot">0</span>,
+                      <span class="mb-slot">1023</span>) to (<span class="mb-slot">1</span>,
+                      <span class="mb-slot">3</span>)
+                    </div>
+                  </div>
+                  <p>
+                    Convertit proportionnellement la plage brute du potentiomètre (<code>0..1023</code>) en un numéro
+                    de piste exploitable entre <code>1</code> et <code>3</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Catégorie · Opérateurs (Data)</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-ops">
+                      join <span class="mb-slot">B:</span> <span class="mb-slot">bouton</span>
+                      <span class="mb-slot">&nbsp;&nbsp;&nbsp;P:</span> <span class="mb-slot">potentiometre</span>
+                    </div>
+                  </div>
+                  <p>
+                    Concatène du texte fixe et les valeurs dynamiques des deux variables en une seule chaîne de
+                    caractères (par exemple <code>B:false&nbsp;&nbsp;&nbsp;P:2</code>) prête à être envoyée à l'écran
+                    OLED.
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Groupe D: Écran OLED Graphics -->
+            <div>
+              <h3 class="block-group-title">Affichage sur écran OLED (bibliothèque OLED Graphics)</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · OLED Graphics</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-oled">
+                      OLED init I2C <span class="mb-slot">OLED_0.96in</span> addr <span class="mb-slot">3C</span>
+                      rot <span class="mb-slot">0</span> flip <span class="mb-slot">false</span>
+                    </div>
+                  </div>
+                  <p>
+                    Configure la communication I2C avec l'écran OLED 0,96 pouce à l'adresse hexadécimale
+                    <code>3C</code>. Indispensable au tout début du script avant tout appel d'écriture.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · OLED Graphics</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-oled">
+                      OLED write <span class="mb-slot">texte</span> x <span class="mb-slot">0</span> y
+                      <span class="mb-slot">0</span> inv <span class="mb-slot">false</span> scale
+                      <span class="mb-slot">2</span>
+                    </div>
+                  </div>
+                  <p>
+                    Dessine un texte sur l'écran aux coordonnées <code>(0, 0)</code> en haut à gauche. L'argument
+                    <code>false</code> garde le texte blanc sur fond noir, et <code>2</code> double la taille des
+                    caractères pour une lecture confortable.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · OLED Graphics</div>
+                  <div class="mb-stack"><div class="mb-block mb-oled">OLED clear</div></div>
+                  <p>
+                    Efface intégralement les pixels de l'écran après les 2 secondes d'accueil « QliiC », afin de laisser
+                    la place à l'affichage en direct de <code>B:... P:...</code>.
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Groupe E: Buzzer & Ringtone -->
+            <div>
+              <h3 class="block-group-title">Synthèse sonore (bibliothèques Tone et Ringtone)</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · Tone</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-sound">attach buzzer to pin <span class="mb-slot">4</span></div>
+                  </div>
+                  <p>
+                    Indique au moteur sonore de MicroBlocks que le buzzer piézoélectrique est raccordé à la broche
+                    <code>4</code>. Tous les blocs audio suivants utiliseront cette broche automatiquement.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · Ringtone</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-sound">play ringtone <span class="mb-slot">Nom:d=4,o=5,b=140:...</span></div>
+                  </div>
+                  <p>
+                    Décode et joue une mélodie écrite au format texte <strong>RTTTL</strong> (<em>Ring Tone Text Transfer
+                    Language</em>) : <code>d=4</code> fixe la durée par défaut (noire), <code>o=5</code> l'octave,
+                    <code>b=140</code> le tempo en BPM, suivis de la suite des notes (<code>c, d, e, f, g, a, b</code> et
+                    <code>p</code> pour pause).
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <!-- Groupe F: NeoPixel RGB -->
+            <div>
+              <h3 class="block-group-title">Guirlande de 7 DEL RGB (bibliothèque NeoPixel)</h3>
+              <div class="blocks-grid">
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · NeoPixel</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-neo">
+                      attach <span class="mb-slot">7</span> LED NeoPixel strip to pin <span class="mb-slot">14</span>
+                    </div>
+                  </div>
+                  <p>
+                    Déclare un ruban ou anneau composé de <code>7</code> DEL RGB adressables connecté sur la broche
+                    <code>14</code> et réserve leur tampon couleur en mémoire.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · NeoPixel</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-neo">
+                      set NeoPixel <span class="mb-slot">1</span> color
+                      <span class="mb-reporter mb-neo"><span class="mb-swatch" aria-hidden="true"></span> color</span>
+                    </div>
+                  </div>
+                  <p>
+                    Applique une couleur RGB à la première DEL (index <code>1</code>). Les autres DEL conservent leur
+                    couleur précédente jusqu'au prochain décalage.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · NeoPixel</div>
+                  <div class="mb-stack">
+                    <div class="mb-reporter mb-neo">
+                      <span class="mb-swatch" aria-hidden="true"></span>
+                      <span class="mb-reporter mb-neo">random color</span>
+                    </div>
+                  </div>
+                  <p>
+                    <code>random color</code> génère une teinte aléatoire vive (au format couleur NeoPixel), encapsulée
+                    dans <code>neoPixel_colorSwatch</code> pour l'injecter directement dans la DEL <code>1</code>.
+                  </p>
+                </article>
+
+                <article class="block-doc-card">
+                  <div class="block-doc-meta">Bibliothèque · NeoPixel</div>
+                  <div class="mb-stack">
+                    <div class="mb-block mb-neo">rotate NeoPixels by <span class="mb-slot">1</span></div>
+                  </div>
+                  <p>
+                    Décale toutes les couleurs d'une position vers la droite (la DEL 1 passe en 2, la 2 en 3… jusqu'à la
+                    7 qui revient en 1). Combiné au tirage aléatoire sur la DEL 1 toutes les 500 ms, il produit un
+                    chenillard multicolore continu.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>Projet #6 · Musique et lumières de Noël sur carte QliiC avec MicroBlocks</span>
+        <div class="footer-links">
+          <a href="#objectif">Objectif</a>
+          <a href="#materiel">Matériel</a>
+          <a href="#etapes">Étapes</a>
+          <a href="#blocs">Blocs</a>
+          <a href="#top">Haut de page</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

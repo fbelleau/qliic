@@ -1,0 +1,6 @@
+{
+  "name": "Atelier QliiC — Musique et lumières de Noël (MicroBlocks)",
+  "description": "Fiche pédagogique HTML/CSS sans JavaScript présentant l'objectif, le guide étape par étape et le rôle des blocs MicroBlocks du projet #6 : Musique et lumières de Noël.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
